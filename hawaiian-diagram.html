@@ -78,11 +78,6 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             border: 3px solid #8B1A1A;
             cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .element:hover {
-            transform: scale(1.1);
         }
 
         .element-icon {
@@ -202,6 +197,122 @@
             pointer-events: none;
         }
 
+        /* Animation Layer */
+        .animation-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Text Overlay */
+        .text-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(139, 26, 26, 0.95);
+            color: #D4A574;
+            padding: 30px 40px;
+            border-radius: 15px;
+            border: 3px solid #D4A574;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .text-overlay h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #D4A574;
+        }
+
+        .text-overlay p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #E5D5B7;
+        }
+
+        .text-overlay .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #D4A574;
+            font-size: 24px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: #8B1A1A;
+            color: #D4A574;
+            border: 2px solid #D4A574;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn:hover {
+            background: #A52A2A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Enhanced hover effects */
+        .element {
+            transition: all 0.3s ease;
+            filter: brightness(1);
+        }
+
+        .element:hover {
+            filter: brightness(1.3);
+        }
+
+        .central-circle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .central-circle:hover {
+            filter: brightness(1.2);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid #D4A574;
+            opacity: 0;
+            pointer-events: none;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .element {
@@ -301,7 +412,7 @@
         </div>
 
         <!-- Element: Top -->
-        <div class="element element-top">
+        <div class="element element-top" data-element-name="Lani" data-element-description="Heaven - The realm of the gods and celestial beings. Lani represents the sky, divine wisdom, and the spiritual realm above all earthly matters.">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Chevron pattern -->
                 <path d="M 20 50 L 50 20 L 80 50" fill="none" stroke="#8B1A1A" stroke-width="6"/>
@@ -311,7 +422,7 @@
         </div>
 
         <!-- Element: Bottom -->
-        <div class="element element-bottom">
+        <div class="element element-bottom" data-element-name="Honua" data-element-description="Earth - The solid foundation of life. Honua represents stability, growth, and the physical world where ancestors rest and plants flourish.">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Triangle pattern -->
                 <polygon points="50,20 80,70 20,70" fill="#8B1A1A"/>
@@ -321,7 +432,7 @@
         </div>
 
         <!-- Element: Left -->
-        <div class="element element-left">
+        <div class="element element-left" data-element-name="Kai" data-element-description="Ocean - The vast waters surrounding the islands. Kai represents abundance, navigation, and the deep connection between Hawaiian people and the sea.">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Spiral pattern -->
                 <path d="M 50 50 Q 50 30, 70 30 Q 80 30, 80 40 Q 80 60, 60 60 Q 30 60, 30 40 Q 30 20, 50 20"
@@ -332,7 +443,7 @@
         </div>
 
         <!-- Element: Right -->
-        <div class="element element-right">
+        <div class="element element-right" data-element-name="Aina" data-element-description="Land - The sacred earth that sustains life. Aina represents agriculture, home, and the deep responsibility to care for the land that nurtures all.">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Geometric pattern -->
                 <rect x="30" y="30" width="15" height="15" fill="#8B1A1A"/>
@@ -345,7 +456,7 @@
         </div>
 
         <!-- Element: Upper Right -->
-        <div class="element element-upper-right">
+        <div class="element element-upper-right" data-element-name="La" data-element-description="Sun - The life-giving light of day. La represents warmth, energy, and the daily cycle that governs all living things in Hawaiian cosmology.">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Sun rays -->
                 <circle cx="50" cy="50" r="15" fill="#8B1A1A"/>
@@ -362,7 +473,7 @@
         </div>
 
         <!-- Element: Lower Right -->
-        <div class="element element-lower-right">
+        <div class="element element-lower-right" data-element-name="Mana" data-element-description="Spirit - The spiritual energy that flows through all things in Hawaiian belief. Mana represents power, authority, and the divine essence connecting heaven, earth, and humanity.">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Wave pattern -->
                 <path d="M 10 40 Q 25 30, 40 40 T 70 40 T 90 40"
@@ -374,11 +485,50 @@
             </svg>
             <div class="element-label">Mana<br>(Spirit)</div>
         </div>
+
+        <!-- Animation Layer for paths -->
+        <svg class="animation-layer" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                    <polygon points="0,0 10,5 0,10" fill="#D4A574" />
+                </marker>
+            </defs>
+        </svg>
+
+        <!-- Text Overlay -->
+        <div class="text-overlay">
+            <button class="close-btn">&times;</button>
+            <h2 id="overlay-title"></h2>
+            <p id="overlay-description"></p>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" id="play-pause-btn">▶ Play</button>
+        <button class="control-btn" id="reset-btn">↻ Reset</button>
     </div>
 
     <script>
-        // Animate elements on load
-        anime.timeline({loop: false})
+        // Global variables
+        let entranceTimeline = null;
+        let isPlaying = false;
+        let currentRotation = 0;
+        const container = document.querySelector('.container');
+        const animationLayer = document.querySelector('.animation-layer');
+        const textOverlay = document.querySelector('.text-overlay');
+        const centralCircle = document.querySelector('.central-circle');
+
+        // Create entrance animation timeline
+        function createEntranceAnimation() {
+            const timeline = anime.timeline({
+                loop: false,
+                autoplay: false,
+                complete: function() {
+                    isPlaying = false;
+                    updatePlayPauseButton();
+                }
+            })
             .add({
                 targets: '.central-circle',
                 scale: [0, 1],
@@ -403,6 +553,14 @@
                 easing: 'easeOutElastic(1, .6)'
             }, '-=300');
 
+            return timeline;
+        }
+
+        // Initialize entrance animation
+        entranceTimeline = createEntranceAnimation();
+        entranceTimeline.play();
+        isPlaying = true;
+
         // Continuous rotation animation for central bird
         anime({
             targets: '.bird-svg',
@@ -412,7 +570,30 @@
             easing: 'easeInOutSine'
         });
 
-        // Pulse animation for elements on hover
+        // Ambient floating animation for patterns
+        anime({
+            targets: '.pattern-container path, .pattern-container polygon',
+            opacity: [0.15, 0.25, 0.15],
+            duration: 3000,
+            loop: true,
+            easing: 'easeInOutSine',
+            delay: anime.stagger(200)
+        });
+
+        // Pulsing glow effect on central circle
+        anime({
+            targets: '.central-circle',
+            boxShadow: [
+                '0 0 30px rgba(139, 26, 26, 0.5)',
+                '0 0 50px rgba(139, 26, 26, 0.8)',
+                '0 0 30px rgba(139, 26, 26, 0.5)'
+            ],
+            duration: 2000,
+            loop: true,
+            easing: 'easeInOutSine'
+        });
+
+        // Enhanced hover effects for elements
         document.querySelectorAll('.element').forEach(element => {
             element.addEventListener('mouseenter', function() {
                 anime({
@@ -440,28 +621,244 @@
             });
         });
 
-        // Ambient floating animation for patterns
-        anime({
-            targets: '.pattern-container path, .pattern-container polygon',
-            opacity: [0.15, 0.25, 0.15],
-            duration: 3000,
-            loop: true,
-            easing: 'easeInOutSine',
-            delay: anime.stagger(200)
+        // Function to get element center position
+        function getElementCenter(element) {
+            const rect = element.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            return {
+                x: rect.left + rect.width / 2 - containerRect.left,
+                y: rect.top + rect.height / 2 - containerRect.top
+            };
+        }
+
+        // Function to animate path from element to center
+        function animatePathToCenter(element) {
+            const elementPos = getElementCenter(element);
+            const centerPos = getElementCenter(centralCircle);
+
+            // Create animated path
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const pathId = 'temp-path-' + Date.now();
+            path.setAttribute('id', pathId);
+            path.setAttribute('d', `M ${elementPos.x} ${elementPos.y} L ${centerPos.x} ${centerPos.y}`);
+            path.setAttribute('stroke', '#D4A574');
+            path.setAttribute('stroke-width', '4');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('marker-end', 'url(#arrowhead)');
+            path.setAttribute('opacity', '0');
+
+            animationLayer.appendChild(path);
+
+            // Animate the path
+            const pathLength = path.getTotalLength();
+            path.style.strokeDasharray = pathLength;
+            path.style.strokeDashoffset = pathLength;
+
+            anime.timeline()
+                .add({
+                    targets: path,
+                    opacity: [0, 1],
+                    duration: 200,
+                    easing: 'easeOutQuad'
+                })
+                .add({
+                    targets: path,
+                    strokeDashoffset: [pathLength, 0],
+                    duration: 800,
+                    easing: 'easeInOutQuad'
+                }, '-=100')
+                .add({
+                    targets: path,
+                    opacity: [1, 0],
+                    duration: 400,
+                    easing: 'easeInQuad',
+                    complete: function() {
+                        path.remove();
+                    }
+                }, '+=200');
+        }
+
+        // Function to show text overlay
+        function showTextOverlay(elementName, description) {
+            document.getElementById('overlay-title').textContent = elementName;
+            document.getElementById('overlay-description').textContent = description;
+
+            anime({
+                targets: textOverlay,
+                opacity: [0, 1],
+                scale: [0.8, 1],
+                duration: 400,
+                easing: 'easeOutQuad',
+                begin: function() {
+                    textOverlay.style.pointerEvents = 'auto';
+                }
+            });
+        }
+
+        // Function to hide text overlay
+        function hideTextOverlay() {
+            anime({
+                targets: textOverlay,
+                opacity: [1, 0],
+                scale: [1, 0.8],
+                duration: 300,
+                easing: 'easeInQuad',
+                complete: function() {
+                    textOverlay.style.pointerEvents = 'none';
+                }
+            });
+        }
+
+        // Click handlers for outer elements
+        document.querySelectorAll('.element').forEach(element => {
+            element.addEventListener('click', function() {
+                const elementName = this.getAttribute('data-element-name');
+                const description = this.getAttribute('data-element-description');
+
+                // Animate path to center
+                animatePathToCenter(this);
+
+                // Show text overlay after a brief delay
+                setTimeout(() => {
+                    showTextOverlay(elementName, description);
+                }, 500);
+            });
         });
 
-        // Pulsing glow effect on central circle
-        anime({
-            targets: '.central-circle',
-            boxShadow: [
-                '0 0 30px rgba(139, 26, 26, 0.5)',
-                '0 0 50px rgba(139, 26, 26, 0.8)',
-                '0 0 30px rgba(139, 26, 26, 0.5)'
-            ],
-            duration: 2000,
-            loop: true,
-            easing: 'easeInOutSine'
+        // Close button for text overlay
+        document.querySelector('.close-btn').addEventListener('click', function() {
+            hideTextOverlay();
         });
+
+        // Click outside overlay to close
+        textOverlay.addEventListener('click', function(e) {
+            if (e.target === textOverlay) {
+                hideTextOverlay();
+            }
+        });
+
+        // Function to create ripple effect
+        function createRipple() {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+
+            const centerRect = centralCircle.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            const size = 200;
+            const x = centerRect.left + centerRect.width / 2 - containerRect.left - size / 2;
+            const y = centerRect.top + centerRect.height / 2 - containerRect.top - size / 2;
+
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+
+            container.appendChild(ripple);
+
+            // Animate ripples (multiple waves)
+            for (let i = 0; i < 3; i++) {
+                const waveRipple = ripple.cloneNode();
+                container.appendChild(waveRipple);
+
+                anime({
+                    targets: waveRipple,
+                    width: [size, size * 3],
+                    height: [size, size * 3],
+                    left: [x, x - size],
+                    top: [y, y - size],
+                    opacity: [0.8, 0],
+                    duration: 1500,
+                    delay: i * 200,
+                    easing: 'easeOutQuad',
+                    complete: function() {
+                        waveRipple.remove();
+                    }
+                });
+            }
+
+            ripple.remove();
+        }
+
+        // Function to rotate all elements
+        function rotateAllElements() {
+            currentRotation += 60;
+
+            anime({
+                targets: '.element',
+                rotate: currentRotation,
+                duration: 1000,
+                easing: 'easeInOutQuad'
+            });
+        }
+
+        // Central circle click handler
+        centralCircle.addEventListener('click', function() {
+            createRipple();
+            rotateAllElements();
+
+            // Pulse central circle
+            anime({
+                targets: centralCircle,
+                scale: [1, 1.1, 1],
+                duration: 600,
+                easing: 'easeInOutQuad'
+            });
+        });
+
+        // Play/Pause button
+        const playPauseBtn = document.getElementById('play-pause-btn');
+
+        function updatePlayPauseButton() {
+            if (isPlaying) {
+                playPauseBtn.textContent = '⏸ Pause';
+            } else {
+                playPauseBtn.textContent = '▶ Play';
+            }
+        }
+
+        playPauseBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                entranceTimeline.pause();
+                isPlaying = false;
+            } else {
+                if (entranceTimeline.progress === 100) {
+                    // If animation completed, restart it
+                    entranceTimeline.restart();
+                } else {
+                    entranceTimeline.play();
+                }
+                isPlaying = true;
+            }
+            updatePlayPauseButton();
+        });
+
+        // Reset button
+        const resetBtn = document.getElementById('reset-btn');
+
+        resetBtn.addEventListener('click', function() {
+            // Reset entrance animation
+            entranceTimeline.restart();
+            isPlaying = true;
+            updatePlayPauseButton();
+
+            // Reset rotation
+            currentRotation = 0;
+            anime({
+                targets: '.element',
+                rotate: 0,
+                duration: 600,
+                easing: 'easeOutQuad'
+            });
+
+            // Hide text overlay if open
+            if (textOverlay.style.opacity > 0) {
+                hideTextOverlay();
+            }
+        });
+
+        // Initialize button state
+        updatePlayPauseButton();
     </script>
 </body>
 </html>
