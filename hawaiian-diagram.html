@@ -377,7 +377,7 @@
     </div>
 
     <script>
-        // Animate elements on load
+        // Animate elements on load with sequential fade-in (200ms stagger)
         anime.timeline({loop: false})
             .add({
                 targets: '.central-circle',
@@ -391,7 +391,7 @@
                 scaleY: [0, 1],
                 opacity: [0, 0.3],
                 duration: 600,
-                delay: anime.stagger(100),
+                delay: anime.stagger(200),
                 easing: 'easeOutQuad'
             }, '-=400')
             .add({
@@ -399,25 +399,25 @@
                 scale: [0, 1],
                 opacity: [0, 1],
                 duration: 600,
-                delay: anime.stagger(100, {from: 'center'}),
+                delay: anime.stagger(200, {from: 'center'}),
                 easing: 'easeOutElastic(1, .6)'
             }, '-=300');
 
-        // Continuous rotation animation for central bird
+        // Continuous rotation animation for central bird (360° every 8s)
         anime({
             targets: '.bird-svg',
-            rotate: [0, 5, 0, -5, 0],
-            duration: 4000,
+            rotate: 360,
+            duration: 8000,
             loop: true,
-            easing: 'easeInOutSine'
+            easing: 'easeInOutQuad'
         });
 
-        // Pulse animation for elements on hover
+        // Scale pulse animation for elements on hover (1.0 to 1.1)
         document.querySelectorAll('.element').forEach(element => {
             element.addEventListener('mouseenter', function() {
                 anime({
                     targets: this,
-                    scale: 1.15,
+                    scale: 1.1,
                     duration: 300,
                     easing: 'easeOutQuad'
                 });
@@ -440,9 +440,27 @@
             });
         });
 
-        // Ambient floating animation for patterns
+        // Stroke drawing effect for geometric patterns
+        const paths = document.querySelectorAll('.pattern-container path');
+        paths.forEach(path => {
+            const pathLength = path.getTotalLength();
+            path.style.strokeDasharray = pathLength;
+            path.style.strokeDashoffset = pathLength;
+        });
+
         anime({
-            targets: '.pattern-container path, .pattern-container polygon',
+            targets: '.pattern-container path',
+            strokeDashoffset: [anime.setDashoffset, 0],
+            duration: 2500,
+            delay: anime.stagger(300),
+            easing: 'easeInOutQuad',
+            loop: true,
+            direction: 'alternate'
+        });
+
+        // Subtle opacity animation for polygon patterns
+        anime({
+            targets: '.pattern-container polygon',
             opacity: [0.15, 0.25, 0.15],
             duration: 3000,
             loop: true,
