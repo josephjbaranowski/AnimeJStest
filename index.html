@@ -561,18 +561,40 @@
         // Hide loading screen after a brief delay to ensure smooth transitions
         // This creates a professional loading experience
 
+        // Fallback: Ensure loading screen is hidden even if initialization fails
+        let loadingScreenHidden = false;
+
+        function hideLoadingScreen() {
+            if (loadingScreenHidden) return;
+            loadingScreenHidden = true;
+
+            const loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.classList.add('hidden');
+            }
+
+            // Start main animation sequence after loading screen fades
+            setTimeout(() => {
+                if (typeof anime !== 'undefined') {
+                    initIntroSequence();
+                } else {
+                    console.warn('anime.js not loaded - animations disabled');
+                    // Make elements visible without animations
+                    document.querySelectorAll('.central-circle, .element, .connection-line').forEach(el => {
+                        el.style.opacity = '1';
+                    });
+                }
+            }, 500);
+        }
+
+        // Primary initialization
         window.addEventListener('load', function() {
             // Small delay ensures all resources are ready
-            setTimeout(() => {
-                const loadingScreen = document.querySelector('.loading-screen');
-                loadingScreen.classList.add('hidden');
-
-                // Start main animation sequence after loading screen fades
-                setTimeout(() => {
-                    initIntroSequence();
-                }, 500);
-            }, 800);
+            setTimeout(hideLoadingScreen, 800);
         });
+
+        // Fallback: Force hide loading screen after 3 seconds regardless
+        setTimeout(hideLoadingScreen, 3000);
 
         // ====================================================================
         // INTRO SEQUENCE - Initial appearance of all elements
@@ -581,6 +603,12 @@
         // Uses elastic easing for playful, energetic entrance
 
         function initIntroSequence() {
+            // Safety check: Ensure anime.js is loaded
+            if (typeof anime === 'undefined') {
+                console.warn('anime.js not available for intro sequence');
+                return;
+            }
+
             const introTimeline = anime.timeline({
                 loop: false,
                 easing: 'easeOutElastic(1, .8)'
@@ -634,6 +662,12 @@
         // All use smooth, slow easings for calm, meditative effect
 
         function initIdleState() {
+            // Safety check: Ensure anime.js is loaded
+            if (typeof anime === 'undefined') {
+                console.warn('anime.js not available for idle state');
+                return;
+            }
+
             // BIRD ROTATION: Slow, continuous 360° rotation (8 seconds per rotation)
             // easeInOutQuad provides smooth acceleration and deceleration
             anime({
@@ -954,7 +988,6 @@
 
         // 2. SPIRAL PATTERNS: Animate outward from center when clicked
         const spiralContainer = document.querySelector('.spiral-container');
-        const centralCircle = document.querySelector('.central-circle');
         let spiralCounter = 0;
 
         function createSpiral() {
