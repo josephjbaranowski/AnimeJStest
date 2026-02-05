@@ -13,10 +13,11 @@
         }
 
         body {
-            min-height: 100vh;
+            min-height: 300vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            padding-top: 10vh;
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             font-family: 'Arial', sans-serif;
             overflow-x: hidden;
@@ -84,7 +85,10 @@
         }
 
         .container {
-            position: relative;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 90vmin;
             height: 90vmin;
             max-width: 800px;
@@ -1252,6 +1256,65 @@
         // Create dynamic connections periodically
         setInterval(createDynamicConnections, 6000);
         setTimeout(createDynamicConnections, 2000);
+
+        // ====================================================================
+        // SCROLL-BASED ROTATION
+        // ====================================================================
+        // Rotate outer circles and mana circle based on scroll position
+
+        let lastScrollRotation = 0;
+
+        function updateScrollRotation() {
+            // Get scroll position
+            const scrollY = window.scrollY || window.pageYOffset;
+
+            // Calculate rotation amount (1 degree per 2 pixels scrolled)
+            const rotationAmount = scrollY * 0.5;
+
+            // Get the outer circles (Lani, Kai, Aina, Honua)
+            const lani = document.querySelector('.element-top');
+            const kai = document.querySelector('.element-left');
+            const aina = document.querySelector('.element-right');
+            const honua = document.querySelector('.element-bottom');
+
+            // Get the mana circle
+            const mana = document.querySelector('.element-lower-right');
+
+            // Apply clockwise rotation to outer circles
+            if (lani) {
+                lani.style.transform = `translate(-50%, 0) rotate(${rotationAmount}deg)`;
+            }
+            if (honua) {
+                honua.style.transform = `translate(-50%, 0) rotate(${rotationAmount}deg)`;
+            }
+            if (kai) {
+                kai.style.transform = `translate(0, -50%) rotate(${rotationAmount}deg)`;
+            }
+            if (aina) {
+                aina.style.transform = `translate(0, -50%) rotate(${rotationAmount}deg)`;
+            }
+
+            // Apply counter-clockwise rotation to mana circle
+            if (mana) {
+                mana.style.transform = `rotate(${-rotationAmount}deg)`;
+            }
+
+            lastScrollRotation = rotationAmount;
+        }
+
+        // Add scroll event listener with throttling for performance
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            if (!scrollTimeout) {
+                scrollTimeout = setTimeout(function() {
+                    updateScrollRotation();
+                    scrollTimeout = null;
+                }, 10);
+            }
+        });
+
+        // Initialize rotation on page load
+        updateScrollRotation();
 
     </script>
 </body>
