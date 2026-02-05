@@ -20,6 +20,67 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             font-family: 'Arial', sans-serif;
             overflow-x: hidden;
+            /* Animated gradient background */
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        /* Smooth gradient animation for background atmosphere */
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Loading screen - displays while page initializes */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Spinning loader with Hawaiian color scheme */
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 6px solid #2d2d2d;
+            border-top: 6px solid #8B1A1A;
+            border-right: 6px solid #D4A574;
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            color: #D4A574;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
         .container {
@@ -28,9 +89,11 @@
             height: 90vmin;
             max-width: 800px;
             max-height: 800px;
+            /* Performance: GPU acceleration for container */
+            will-change: transform;
         }
 
-        /* Central Circle */
+        /* Central Circle - Performance optimized with will-change */
         .central-circle {
             position: absolute;
             top: 50%;
@@ -47,6 +110,8 @@
                         inset 0 0 20px rgba(0, 0, 0, 0.3);
             border: 4px solid #D4A574;
             z-index: 10;
+            /* Performance: Optimize for transform and box-shadow animations */
+            will-change: transform, box-shadow;
         }
 
         .bird-container {
@@ -64,7 +129,7 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
         }
 
-        /* Element Circles */
+        /* Element Circles - Performance optimized for smooth interactions */
         .element {
             position: absolute;
             width: 120px;
@@ -79,6 +144,9 @@
             border: 3px solid #8B1A1A;
             cursor: pointer;
             transition: transform 0.3s ease;
+            /* Performance: Enable GPU acceleration for smooth scaling */
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
         .element:hover {
@@ -191,7 +259,7 @@
             transform-origin: bottom center;
         }
 
-        /* Geometric Patterns */
+        /* Geometric Patterns - Performance optimized for continuous animation */
         .pattern-container {
             position: absolute;
             width: 100%;
@@ -200,6 +268,24 @@
             left: 0;
             z-index: 0;
             pointer-events: none;
+            /* Performance: Optimize for opacity and transform changes */
+            will-change: opacity, transform;
+        }
+
+        /* Add floating animation for pattern container */
+        @keyframes floatPattern {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-10px) translateX(5px);
+            }
+            50% {
+                transform: translateY(0) translateX(10px);
+            }
+            75% {
+                transform: translateY(10px) translateX(5px);
+            }
         }
 
         /* Particle System */
@@ -296,6 +382,12 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen - Displayed during initialization -->
+    <div class="loading-screen">
+        <div class="loader"></div>
+        <div class="loading-text">LOADING...</div>
+    </div>
+
     <div class="container">
         <!-- Morphing Shapes Layer -->
         <svg class="morphing-shapes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
@@ -444,110 +536,372 @@
     </div>
 
     <script>
-        // Animate elements on load with sequential fade-in (200ms stagger)
-        anime.timeline({loop: false})
-            .add({
+        // ====================================================================
+        // CUSTOM EASING FUNCTIONS
+        // ====================================================================
+        // Define custom cubic-bezier easing for smooth, natural motion
+        // Format: cubic-bezier(x1, y1, x2, y2) - control points for Bézier curve
+
+        const customEasing = {
+            // Smooth elastic bounce - great for appearing elements
+            elasticOut: 'cubicBezier(0.68, -0.55, 0.265, 1.55)',
+            // Gentle spring effect - natural feeling motion
+            spring: 'spring(1, 80, 10, 0)',
+            // Smooth deceleration - polished exits
+            smoothOut: 'cubicBezier(0.25, 0.46, 0.45, 0.94)',
+            // Quick acceleration with smooth finish
+            quickSnap: 'cubicBezier(0.4, 0.0, 0.2, 1)',
+            // Anticipation effect - pulls back before moving forward
+            anticipate: 'cubicBezier(0.36, 0, 0.66, -0.56)'
+        };
+
+        // ====================================================================
+        // LOADING ANIMATION & PAGE INITIALIZATION
+        // ====================================================================
+        // Hide loading screen after a brief delay to ensure smooth transitions
+        // This creates a professional loading experience
+
+        window.addEventListener('load', function() {
+            // Small delay ensures all resources are ready
+            setTimeout(() => {
+                const loadingScreen = document.querySelector('.loading-screen');
+                loadingScreen.classList.add('hidden');
+
+                // Start main animation sequence after loading screen fades
+                setTimeout(() => {
+                    initIntroSequence();
+                }, 500);
+            }, 800);
+        });
+
+        // ====================================================================
+        // INTRO SEQUENCE - Initial appearance of all elements
+        // ====================================================================
+        // Animation sequence: Central circle → Connection lines → Element circles
+        // Uses elastic easing for playful, energetic entrance
+
+        function initIntroSequence() {
+            const introTimeline = anime.timeline({
+                loop: false,
+                easing: 'easeOutElastic(1, .8)'
+            });
+
+            // STEP 1: Central circle appears with elastic bounce
+            // Scale from 0 to 1 creates a "pop" effect
+            introTimeline.add({
                 targets: '.central-circle',
                 scale: [0, 1],
                 opacity: [0, 1],
-                duration: 800,
-                easing: 'easeOutElastic(1, .8)'
-            })
-            .add({
+                duration: 1000,
+                easing: 'easeOutElastic(1, .8)',
+                begin: function() {
+                    // Ensure element is visible before animation starts
+                    document.querySelector('.central-circle').style.opacity = 1;
+                }
+            });
+
+            // STEP 2: Connection lines grow from center outward
+            // Stagger creates sequential appearance (200ms between each line)
+            introTimeline.add({
                 targets: '.connection-line',
                 scaleY: [0, 1],
                 opacity: [0, 0.3],
-                duration: 600,
-                delay: anime.stagger(200),
-                easing: 'easeOutQuad'
-            }, '-=400')
-            .add({
+                duration: 700,
+                delay: anime.stagger(150),
+                easing: 'easeOutCubic'
+            }, '-=500'); // Start 500ms before previous animation ends (overlap)
+
+            // STEP 3: Element circles appear with staggered elastic bounce
+            // from: 'center' makes closest elements appear first
+            introTimeline.add({
                 targets: '.element',
                 scale: [0, 1],
                 opacity: [0, 1],
-                duration: 600,
-                delay: anime.stagger(200, {from: 'center'}),
-                easing: 'easeOutElastic(1, .6)'
-            }, '-=300');
+                duration: 800,
+                delay: anime.stagger(150, {from: 'center'}),
+                easing: 'easeOutElastic(1, .6)',
+                complete: function() {
+                    // After intro completes, start idle state animations
+                    initIdleState();
+                }
+            }, '-=400');
+        }
 
-        // Continuous rotation animation for central bird (360° every 8s)
-        anime({
-            targets: '.bird-svg',
-            rotate: 360,
-            duration: 8000,
-            loop: true,
-            easing: 'easeInOutQuad'
-        });
+        // ====================================================================
+        // IDLE STATE - Continuous subtle animations when no interaction
+        // ====================================================================
+        // These animations create a "living" feeling without being distracting
+        // All use smooth, slow easings for calm, meditative effect
 
-        // Scale pulse animation for elements on hover (1.0 to 1.1)
+        function initIdleState() {
+            // BIRD ROTATION: Slow, continuous 360° rotation (8 seconds per rotation)
+            // easeInOutQuad provides smooth acceleration and deceleration
+            anime({
+                targets: '.bird-svg',
+                rotate: 360,
+                duration: 8000,
+                loop: true,
+                easing: 'easeInOutQuad'
+            });
+
+            // CENTRAL CIRCLE GLOW PULSE: Creates breathing effect
+            // Alternates between subtle and prominent shadow
+            anime({
+                targets: '.central-circle',
+                boxShadow: [
+                    '0 0 30px rgba(139, 26, 26, 0.5)',
+                    '0 0 50px rgba(139, 26, 26, 0.8)',
+                    '0 0 30px rgba(139, 26, 26, 0.5)'
+                ],
+                duration: 3000,
+                loop: true,
+                easing: 'easeInOutSine' // Sine wave creates natural breathing rhythm
+            });
+
+            // ELEMENT SUBTLE FLOAT: Gentle up/down motion
+            // Adds life to static elements without being distracting
+            anime({
+                targets: '.element',
+                translateY: [0, -5, 0],
+                duration: 4000,
+                loop: true,
+                delay: anime.stagger(300), // Each element floats at different times
+                easing: 'easeInOutSine'
+            });
+
+            // PATTERN STROKE ANIMATION: Line drawing effect
+            // Creates hypnotic, flowing motion in background patterns
+            initPatternAnimations();
+
+            // BACKGROUND PATTERN MOVEMENT: Subtle floating motion
+            // Adds depth and dimension to the background
+            anime({
+                targets: '.pattern-container',
+                translateY: [0, -10, 0],
+                translateX: [0, 5, 0],
+                duration: 20000,
+                loop: true,
+                easing: 'easeInOutSine'
+            });
+        }
+
+        // ====================================================================
+        // PATTERN ANIMATIONS - Background geometric pattern effects
+        // ====================================================================
+        // Animate SVG stroke paths to create drawing effect
+        // Opacity pulsing adds visual interest without distraction
+
+        function initPatternAnimations() {
+            // Setup stroke dasharray for line drawing animation
+            // This technique makes paths appear to "draw themselves"
+            const paths = document.querySelectorAll('.pattern-container path');
+            paths.forEach(path => {
+                const pathLength = path.getTotalLength();
+                path.style.strokeDasharray = pathLength;
+                path.style.strokeDashoffset = pathLength;
+            });
+
+            // STROKE DRAWING: Paths draw and undraw continuously
+            // alternate direction creates seamless loop
+            anime({
+                targets: '.pattern-container path',
+                strokeDashoffset: [anime.setDashoffset, 0],
+                duration: 3000,
+                delay: anime.stagger(400), // Sequential drawing
+                easing: 'easeInOutQuad',
+                loop: true,
+                direction: 'alternate'
+            });
+
+            // POLYGON OPACITY PULSE: Subtle fade in/out
+            // Creates gentle twinkling effect
+            anime({
+                targets: '.pattern-container polygon',
+                opacity: [0.15, 0.3, 0.15],
+                duration: 4000,
+                loop: true,
+                easing: 'easeInOutSine',
+                delay: anime.stagger(300)
+            });
+        }
+
+        // ====================================================================
+        // INTERACTION STATES - Mouse hover and click responses
+        // ====================================================================
+        // These animations provide immediate feedback to user actions
+        // Using spring physics creates natural, satisfying interactions
+
+        // Setup hover interactions for all element circles
         document.querySelectorAll('.element').forEach(element => {
+            // HOVER ENTER: Scale up with spring bounce
             element.addEventListener('mouseenter', function() {
+                // Stop any ongoing idle float animation for this element
+                anime.remove(this);
+
+                // Scale element to 1.15x with spring easing
+                // Spring physics creates satisfying bounce
                 anime({
                     targets: this,
-                    scale: 1.1,
-                    duration: 300,
-                    easing: 'easeOutQuad'
+                    scale: 1.15,
+                    duration: 600,
+                    easing: 'spring(1, 80, 10, 0)' // Spring with natural bounce
                 });
 
+                // Rotate icon 360° with smooth ease
+                // Creates playful, engaging interaction
                 anime({
                     targets: this.querySelector('.element-icon'),
                     rotate: [0, 360],
                     duration: 800,
-                    easing: 'easeInOutQuad'
+                    easing: 'easeInOutCubic'
                 });
-            });
 
-            element.addEventListener('mouseleave', function() {
+                // Brighten element shadow for depth
                 anime({
                     targets: this,
-                    scale: 1,
+                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.5)',
                     duration: 300,
                     easing: 'easeOutQuad'
                 });
             });
+
+            // HOVER LEAVE: Return to normal state
+            element.addEventListener('mouseleave', function() {
+                // Smooth return to idle state
+                anime({
+                    targets: this,
+                    scale: 1,
+                    duration: 400,
+                    easing: 'easeOutCubic'
+                });
+
+                // Restore original shadow
+                anime({
+                    targets: this,
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.3)',
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+
+                // Resume idle float animation
+                anime({
+                    targets: this,
+                    translateY: [0, -5, 0],
+                    duration: 4000,
+                    loop: true,
+                    easing: 'easeInOutSine'
+                });
+            });
+
+            // CLICK: Emphatic bounce feedback
+            element.addEventListener('click', function() {
+                // Quick scale down then up creates "press" effect
+                anime({
+                    targets: this,
+                    scale: [1.15, 0.95, 1.15],
+                    duration: 400,
+                    easing: 'easeOutElastic(1, .5)'
+                });
+
+                // Flash effect on icon
+                anime({
+                    targets: this.querySelector('.element-icon'),
+                    opacity: [1, 0.5, 1],
+                    duration: 300,
+                    easing: 'easeInOutQuad'
+                });
+            });
         });
 
-        // Stroke drawing effect for geometric patterns
-        const paths = document.querySelectorAll('.pattern-container path');
-        paths.forEach(path => {
-            const pathLength = path.getTotalLength();
-            path.style.strokeDasharray = pathLength;
-            path.style.strokeDashoffset = pathLength;
+        // ====================================================================
+        // CENTRAL CIRCLE INTERACTION - Special hover effect for main element
+        // ====================================================================
+        const centralCircle = document.querySelector('.central-circle');
+
+        centralCircle.addEventListener('mouseenter', function() {
+            // Grow central circle and intensify glow
+            anime({
+                targets: this,
+                scale: 1.05,
+                duration: 500,
+                easing: 'easeOutElastic(1, .8)'
+            });
+
+            // Speed up bird rotation on hover for playful interaction
+            anime.remove('.bird-svg'); // Stop current rotation
+            anime({
+                targets: '.bird-svg',
+                rotate: 360,
+                duration: 2000, // Faster than idle (was 8000)
+                loop: true,
+                easing: 'linear'
+            });
         });
 
-        anime({
-            targets: '.pattern-container path',
-            strokeDashoffset: [anime.setDashoffset, 0],
-            duration: 2500,
-            delay: anime.stagger(300),
-            easing: 'easeInOutQuad',
-            loop: true,
-            direction: 'alternate'
+        centralCircle.addEventListener('mouseleave', function() {
+            // Return to normal size
+            anime({
+                targets: this,
+                scale: 1,
+                duration: 500,
+                easing: 'easeOutCubic'
+            });
+
+            // Restore normal bird rotation speed
+            anime.remove('.bird-svg');
+            anime({
+                targets: '.bird-svg',
+                rotate: 360,
+                duration: 8000,
+                loop: true,
+                easing: 'easeInOutQuad'
+            });
         });
 
-        // Subtle opacity animation for polygon patterns
-        anime({
-            targets: '.pattern-container polygon',
-            opacity: [0.15, 0.25, 0.15],
-            duration: 3000,
-            loop: true,
-            easing: 'easeInOutSine',
-            delay: anime.stagger(200)
-        });
+        // ====================================================================
+        // PERFORMANCE OPTIMIZATION
+        // ====================================================================
+        // Monitor frame rate and adjust animation quality if needed
+        // Ensures 60fps on all devices
 
-        // Pulsing glow effect on central circle
-        anime({
-            targets: '.central-circle',
-            boxShadow: [
-                '0 0 30px rgba(139, 26, 26, 0.5)',
-                '0 0 50px rgba(139, 26, 26, 0.8)',
-                '0 0 30px rgba(139, 26, 26, 0.5)'
-            ],
-            duration: 2000,
-            loop: true,
-            easing: 'easeInOutSine'
-        });
+        let frameCount = 0;
+        let lastTime = performance.now();
+        let fps = 60;
 
+        function checkPerformance() {
+            frameCount++;
+            const currentTime = performance.now();
+
+            // Calculate FPS every second
+            if (currentTime >= lastTime + 1000) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                frameCount = 0;
+                lastTime = currentTime;
+
+                // If FPS drops below 50, reduce animation complexity
+                if (fps < 50) {
+                    console.log('Performance optimization: Reducing animation complexity');
+                    // Disable some background animations
+                    anime.remove('.pattern-container');
+                }
+            }
+
+            requestAnimationFrame(checkPerformance);
+        }
+
+        // Start performance monitoring
+        requestAnimationFrame(checkPerformance);
+
+        // ====================================================================
+        // ACCESSIBILITY - Respect user's motion preferences
+        // ====================================================================
+        // Disable animations if user prefers reduced motion
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            // Stop all anime.js animations
+            anime.running.forEach(anim => anim.pause());
+            console.log('Reduced motion mode: Animations paused');
+        }
         // ===== SOPHISTICATED ANIMATIONS =====
 
         // 1. PARTICLE SYSTEM: Dots flowing from outer elements to center
