@@ -202,6 +202,45 @@
             pointer-events: none;
         }
 
+        /* Particle System */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Spiral Patterns Container */
+        .spiral-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Morphing Shapes */
+        .morphing-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .morphing-shape {
+            position: absolute;
+        }
+
+        /* Parallax Layers */
+        .parallax-layer {
+            transition: transform 0.1s ease-out;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .element {
@@ -258,8 +297,36 @@
 </head>
 <body>
     <div class="container">
+        <!-- Morphing Shapes Layer -->
+        <svg class="morphing-shapes" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+            <!-- Morphing shapes that transition between triangles and circles -->
+            <g class="morphing-shape" transform="translate(150, 150)">
+                <circle cx="0" cy="0" r="30" fill="#D4A574" opacity="0.3"/>
+            </g>
+            <g class="morphing-shape" transform="translate(650, 150)">
+                <circle cx="0" cy="0" r="30" fill="#8B1A1A" opacity="0.3"/>
+            </g>
+            <g class="morphing-shape" transform="translate(150, 650)">
+                <circle cx="0" cy="0" r="30" fill="#D4A574" opacity="0.3"/>
+            </g>
+            <g class="morphing-shape" transform="translate(650, 650)">
+                <circle cx="0" cy="0" r="30" fill="#8B1A1A" opacity="0.3"/>
+            </g>
+        </svg>
+
+        <!-- Spiral Patterns -->
+        <svg class="spiral-container" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+            <defs>
+                <radialGradient id="spiralGradient">
+                    <stop offset="0%" style="stop-color:#D4A574;stop-opacity:0.6"/>
+                    <stop offset="100%" style="stop-color:#D4A574;stop-opacity:0"/>
+                </radialGradient>
+            </defs>
+            <!-- Spirals will be dynamically created -->
+        </svg>
+
         <!-- Background patterns -->
-        <svg class="pattern-container" xmlns="http://www.w3.org/2000/svg">
+        <svg class="pattern-container parallax-layer" data-speed="0.5" xmlns="http://www.w3.org/2000/svg">
             <!-- Spiral patterns -->
             <path d="M 400 400 Q 420 380, 440 400 T 480 400 T 520 400"
                   fill="none" stroke="#8B1A1A" stroke-width="2" opacity="0.2"/>
@@ -278,15 +345,15 @@
         </svg>
 
         <!-- Connecting lines -->
-        <div class="connection-line line-top"></div>
-        <div class="connection-line line-bottom"></div>
-        <div class="connection-line line-left"></div>
-        <div class="connection-line line-right"></div>
-        <div class="connection-line line-upper-right"></div>
-        <div class="connection-line line-lower-right"></div>
+        <div class="connection-line line-top parallax-layer" data-speed="0.8"></div>
+        <div class="connection-line line-bottom parallax-layer" data-speed="0.8"></div>
+        <div class="connection-line line-left parallax-layer" data-speed="0.8"></div>
+        <div class="connection-line line-right parallax-layer" data-speed="0.8"></div>
+        <div class="connection-line line-upper-right parallax-layer" data-speed="0.8"></div>
+        <div class="connection-line line-lower-right parallax-layer" data-speed="0.8"></div>
 
         <!-- Central Circle with Bird -->
-        <div class="central-circle">
+        <div class="central-circle parallax-layer" data-speed="1.2">
             <div class="bird-container">
                 <svg class="bird-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <!-- Hawaiian bird (simplified 'Iwa / frigate bird) -->
@@ -301,7 +368,7 @@
         </div>
 
         <!-- Element: Top -->
-        <div class="element element-top">
+        <div class="element element-top parallax-layer" data-speed="1.0">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Chevron pattern -->
                 <path d="M 20 50 L 50 20 L 80 50" fill="none" stroke="#8B1A1A" stroke-width="6"/>
@@ -311,7 +378,7 @@
         </div>
 
         <!-- Element: Bottom -->
-        <div class="element element-bottom">
+        <div class="element element-bottom parallax-layer" data-speed="1.0">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Triangle pattern -->
                 <polygon points="50,20 80,70 20,70" fill="#8B1A1A"/>
@@ -321,7 +388,7 @@
         </div>
 
         <!-- Element: Left -->
-        <div class="element element-left">
+        <div class="element element-left parallax-layer" data-speed="1.0">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Spiral pattern -->
                 <path d="M 50 50 Q 50 30, 70 30 Q 80 30, 80 40 Q 80 60, 60 60 Q 30 60, 30 40 Q 30 20, 50 20"
@@ -332,7 +399,7 @@
         </div>
 
         <!-- Element: Right -->
-        <div class="element element-right">
+        <div class="element element-right parallax-layer" data-speed="1.0">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Geometric pattern -->
                 <rect x="30" y="30" width="15" height="15" fill="#8B1A1A"/>
@@ -345,7 +412,7 @@
         </div>
 
         <!-- Element: Upper Right -->
-        <div class="element element-upper-right">
+        <div class="element element-upper-right parallax-layer" data-speed="1.0">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Sun rays -->
                 <circle cx="50" cy="50" r="15" fill="#8B1A1A"/>
@@ -362,7 +429,7 @@
         </div>
 
         <!-- Element: Lower Right -->
-        <div class="element element-lower-right">
+        <div class="element element-lower-right parallax-layer" data-speed="1.0">
             <svg class="element-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Wave pattern -->
                 <path d="M 10 40 Q 25 30, 40 40 T 70 40 T 90 40"
@@ -480,6 +547,325 @@
             loop: true,
             easing: 'easeInOutSine'
         });
+
+        // ===== SOPHISTICATED ANIMATIONS =====
+
+        // 1. PARTICLE SYSTEM: Dots flowing from outer elements to center
+        const container = document.querySelector('.container');
+        const containerRect = container.getBoundingClientRect();
+        const centerX = containerRect.width / 2;
+        const centerY = containerRect.height / 2;
+
+        function createParticle(startX, startY) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = startX + 'px';
+            particle.style.top = startY + 'px';
+            particle.style.width = (Math.random() * 4 + 2) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = Math.random() > 0.5 ? '#D4A574' : '#8B1A1A';
+            particle.style.opacity = Math.random() * 0.6 + 0.3;
+            container.appendChild(particle);
+
+            // Animate particle from outer element to center
+            anime({
+                targets: particle,
+                left: centerX,
+                top: centerY,
+                opacity: [particle.style.opacity, 0],
+                duration: Math.random() * 2000 + 2000,
+                easing: 'easeInQuad',
+                complete: () => particle.remove()
+            });
+        }
+
+        // Generate particles continuously from each element
+        function generateParticlesFromElements() {
+            const elements = document.querySelectorAll('.element');
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                const startX = rect.left - containerRect.left + rect.width / 2;
+                const startY = rect.top - containerRect.top + rect.height / 2;
+
+                // Create particle with random offset
+                const offsetX = (Math.random() - 0.5) * 40;
+                const offsetY = (Math.random() - 0.5) * 40;
+                createParticle(startX + offsetX, startY + offsetY);
+            });
+        }
+
+        // Generate particles every 500ms
+        setInterval(generateParticlesFromElements, 500);
+
+        // 2. SPIRAL PATTERNS: Animate outward from center when clicked
+        const spiralContainer = document.querySelector('.spiral-container');
+        const centralCircle = document.querySelector('.central-circle');
+        let spiralCounter = 0;
+
+        function createSpiral() {
+            spiralCounter++;
+            const spiralId = 'spiral-' + spiralCounter;
+
+            // Create spiral path using parametric equation
+            let pathData = 'M 400 400 ';
+            const turns = 3;
+            const maxRadius = 300;
+            const points = 50;
+
+            for (let i = 0; i <= points; i++) {
+                const t = i / points;
+                const angle = t * turns * Math.PI * 2;
+                const radius = t * maxRadius;
+                const x = 400 + radius * Math.cos(angle);
+                const y = 400 + radius * Math.sin(angle);
+                pathData += `L ${x} ${y} `;
+            }
+
+            const spiral = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            spiral.setAttribute('d', pathData);
+            spiral.setAttribute('fill', 'none');
+            spiral.setAttribute('stroke', 'url(#spiralGradient)');
+            spiral.setAttribute('stroke-width', '3');
+            spiral.setAttribute('opacity', '0');
+            spiral.setAttribute('id', spiralId);
+            spiralContainer.appendChild(spiral);
+
+            // Animate spiral drawing outward
+            const pathLength = spiral.getTotalLength();
+            spiral.style.strokeDasharray = pathLength;
+            spiral.style.strokeDashoffset = pathLength;
+
+            anime.timeline()
+                .add({
+                    targets: spiral,
+                    strokeDashoffset: [pathLength, 0],
+                    opacity: [0, 0.8, 0],
+                    duration: 3000,
+                    easing: 'easeOutQuad',
+                    complete: () => spiral.remove()
+                });
+        }
+
+        // Create spiral on central circle click
+        centralCircle.addEventListener('click', createSpiral);
+
+        // Auto-generate spirals occasionally
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createSpiral();
+            }
+        }, 5000);
+
+        // 3. CONNECTION LINES: Enhanced draw/undraw animation
+        const connectionLines = document.querySelectorAll('.connection-line');
+
+        // Animate connection lines with pulsing effect
+        anime({
+            targets: '.connection-line',
+            opacity: [0.3, 0.7, 0.3],
+            duration: 3000,
+            loop: true,
+            easing: 'easeInOutSine',
+            delay: anime.stagger(400)
+        });
+
+        // Add drawing effect on hover
+        document.querySelectorAll('.element').forEach((element, index) => {
+            element.addEventListener('mouseenter', function() {
+                const lines = document.querySelectorAll('.connection-line');
+                anime({
+                    targets: lines[index],
+                    opacity: 1,
+                    duration: 300,
+                    easing: 'easeOutQuad'
+                });
+            });
+
+            element.addEventListener('mouseleave', function() {
+                const lines = document.querySelectorAll('.connection-line');
+                anime({
+                    targets: lines[index],
+                    opacity: 0.3,
+                    duration: 500,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+
+        // 4. MORPHING SHAPES: Transition between triangles and circles
+        const morphingShapes = document.querySelectorAll('.morphing-shape');
+
+        morphingShapes.forEach((shape, index) => {
+            const circle = shape.querySelector('circle');
+            const isGold = index % 2 === 0;
+
+            // Create triangle path for morphing
+            const trianglePath = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+            trianglePath.setAttribute('points', '0,-30 26,15 -26,15');
+            trianglePath.setAttribute('fill', isGold ? '#D4A574' : '#8B1A1A');
+            trianglePath.setAttribute('opacity', '0');
+            shape.appendChild(trianglePath);
+
+            // Morph between circle and triangle
+            anime.timeline({ loop: true })
+                .add({
+                    targets: circle,
+                    opacity: [0.3, 0],
+                    scale: [1, 0.8],
+                    duration: 1500,
+                    easing: 'easeInOutQuad'
+                })
+                .add({
+                    targets: trianglePath,
+                    opacity: [0, 0.3],
+                    scale: [0.8, 1],
+                    rotate: [0, 120],
+                    duration: 1500,
+                    easing: 'easeInOutQuad'
+                }, '-=1500')
+                .add({
+                    targets: trianglePath,
+                    opacity: [0.3, 0],
+                    scale: [1, 0.8],
+                    rotate: [120, 240],
+                    duration: 1500,
+                    easing: 'easeInOutQuad',
+                    delay: 1000
+                })
+                .add({
+                    targets: circle,
+                    opacity: [0, 0.3],
+                    scale: [0.8, 1],
+                    duration: 1500,
+                    easing: 'easeInOutQuad'
+                }, '-=1500');
+        });
+
+        // Add rotation animation to morphing shapes
+        anime({
+            targets: '.morphing-shape',
+            rotate: 360,
+            duration: 20000,
+            loop: true,
+            easing: 'linear',
+            delay: anime.stagger(1000)
+        });
+
+        // 5. PARALLAX EFFECT: Different layers move at different speeds on mouse move
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentX = 0;
+        let currentY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            mouseX = (e.clientX - rect.left - rect.width / 2) / rect.width;
+            mouseY = (e.clientY - rect.top - rect.height / 2) / rect.height;
+        });
+
+        // Smooth parallax animation loop
+        function animateParallax() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-speed') || 1);
+                const x = currentX * 50 * speed;
+                const y = currentY * 50 * speed;
+
+                // Get current transform and preserve it
+                const computedStyle = window.getComputedStyle(layer);
+                const matrix = computedStyle.transform;
+
+                if (layer.classList.contains('element-top')) {
+                    layer.style.transform = `translate(calc(-50% + ${x}px), ${y}px)`;
+                } else if (layer.classList.contains('element-bottom')) {
+                    layer.style.transform = `translate(calc(-50% + ${x}px), ${y}px)`;
+                } else if (layer.classList.contains('element-left')) {
+                    layer.style.transform = `translate(${x}px, calc(-50% + ${y}px))`;
+                } else if (layer.classList.contains('element-right')) {
+                    layer.style.transform = `translate(${x}px, calc(-50% + ${y}px))`;
+                } else if (layer.classList.contains('central-circle')) {
+                    layer.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+                } else if (layer.classList.contains('line-top')) {
+                    layer.style.transform = `translateX(calc(-50% + ${x}px)) translateY(${y}px)`;
+                } else if (layer.classList.contains('line-bottom')) {
+                    layer.style.transform = `translateX(calc(-50% + ${x}px)) translateY(${y}px)`;
+                } else if (layer.classList.contains('line-left')) {
+                    layer.style.transform = `translateY(calc(-50% + ${y}px)) translateX(${x}px)`;
+                } else if (layer.classList.contains('line-right')) {
+                    layer.style.transform = `translateY(calc(-50% + ${y}px)) translateX(${x}px)`;
+                } else if (layer.classList.contains('line-upper-right')) {
+                    layer.style.transform = `rotate(45deg) translate(${x}px, ${y}px)`;
+                } else if (layer.classList.contains('line-lower-right')) {
+                    layer.style.transform = `rotate(-45deg) translate(${x}px, ${y}px)`;
+                } else {
+                    layer.style.transform = `translate(${x}px, ${y}px)`;
+                }
+            });
+
+            requestAnimationFrame(animateParallax);
+        }
+
+        animateParallax();
+
+        // Additional enhancement: Connecting lines between elements
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'dynamic-connections');
+        svg.style.position = 'absolute';
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.zIndex = '3';
+        svg.style.pointerEvents = 'none';
+        container.appendChild(svg);
+
+        function createDynamicConnections() {
+            svg.innerHTML = '';
+            const elements = document.querySelectorAll('.element');
+
+            elements.forEach((elem1, i) => {
+                elements.forEach((elem2, j) => {
+                    if (i < j && Math.random() > 0.6) {
+                        const rect1 = elem1.getBoundingClientRect();
+                        const rect2 = elem2.getBoundingClientRect();
+                        const containerRect = container.getBoundingClientRect();
+
+                        const x1 = rect1.left - containerRect.left + rect1.width / 2;
+                        const y1 = rect1.top - containerRect.top + rect1.height / 2;
+                        const x2 = rect2.left - containerRect.left + rect2.width / 2;
+                        const y2 = rect2.top - containerRect.top + rect2.height / 2;
+
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', x1);
+                        line.setAttribute('y1', y1);
+                        line.setAttribute('x2', x2);
+                        line.setAttribute('y2', y2);
+                        line.setAttribute('stroke', '#D4A574');
+                        line.setAttribute('stroke-width', '1');
+                        line.setAttribute('opacity', '0');
+                        svg.appendChild(line);
+
+                        // Animate line drawing
+                        anime({
+                            targets: line,
+                            opacity: [0, 0.2, 0],
+                            duration: 4000,
+                            easing: 'easeInOutQuad',
+                            complete: () => line.remove()
+                        });
+                    }
+                });
+            });
+        }
+
+        // Create dynamic connections periodically
+        setInterval(createDynamicConnections, 6000);
+        setTimeout(createDynamicConnections, 2000);
+
     </script>
 </body>
 </html>
